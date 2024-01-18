@@ -11,5 +11,6 @@ export default defineConfig({
     alias: {
       "$src": join(process.cwd(), "src")
     }
-  }
+  },
+  base: "/swisschess-ui/"
 });

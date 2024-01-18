@@ -43,11 +43,16 @@ export function getHistoryRecord() {
 }
 
 export function addRound() {
-  const round = getNextRound(playersObs.value, getHistoryRecord(), roundsObs.value.length);
-  if (round) {
-    roundsObs.value.push(round);
-    roundsObs.notify();
-  }
+  return new Promise((resolve, reject) => {
+    const round = getNextRound(playersObs.value, getHistoryRecord(), roundsObs.value.length);
+    if (round) {
+      roundsObs.value.push(round);
+      roundsObs.notify();
+      resolve(round);
+      return;
+    }
+    reject("Appariements impossibles.");
+  });
 }
 
 export default roundsObs;

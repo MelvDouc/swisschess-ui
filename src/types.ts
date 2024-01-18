@@ -1,4 +1,4 @@
-import type { Color, Result } from "./helpers/constants.js";
+import type { Color, Result } from "$src/helpers/constants.js";
 
 export interface Player {
   id: number;
@@ -7,9 +7,10 @@ export interface Player {
 }
 
 export interface Pairing {
-  roundIndex: number;
   whitePlayer: Player;
+  whitePoints: number;
   blackPlayer: Player | null;
+  blackPoints: number;
   result: Result;
 }
 

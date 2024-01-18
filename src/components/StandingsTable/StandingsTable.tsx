@@ -1,19 +1,20 @@
 import { getStandings } from "$src/state/tournament.ts";
-import { Color } from "../../helpers/constants.ts";
+import { Color } from "$src/helpers/constants.ts";
+import cssClasses from "./StandingsTable.module.css";
 
 export default function StandingsTable() {
   const standings = getStandings();
 
   return (
-    <table className="table table-dark table-striped table-hover mb-2">
+    <table className={`table table-dark table-striped table-hover mb-2 ${cssClasses.StandingsTable}`}>
       <thead>
         <tr>
           <th></th>
           <th>Nom</th>
           <th>Points</th>
           <th>Buchholz</th>
-          <td>Cumul</td>
-          <td>Résultats</td>
+          <th>Cumul</th>
+          <th>Résultats</th>
         </tr>
       </thead>
       <tbody>

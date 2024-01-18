@@ -96,15 +96,21 @@ function getFirstRoundPairings(players: Player[]) {
   const pairings = Array.from({ length: halfLength }, (_, i) => {
     const player1 = players[i];
     const player2 = players[i + halfLength];
-    return (i % 2 === 0)
-      ? [player1, player2]
-      : [player2, player1];
-  }) as PairingTuple[];
+    const whitePlayer = (i % 2 === 0) ? player1 : player2;
+    const blackPlayer = (i % 2 === 0) ? player2 : player1;
+    return {
+      whitePlayer,
+      whitePoints: 0,
+      blackPlayer,
+      blackPoints: 0
+    };
+  });
 
   bye && players.push(bye);
   return {
     pairings,
-    bye
+    bye,
+    byePoints: 0
   };
 }
 
@@ -128,8 +134,16 @@ export function getSubsequentRoundPairings(players: Player[], historyRecord: Rec
   const success = tryPairings(players, dataRecord, pairingSet);
   bye && players.push(bye);
   return {
-    pairings: success ? [...pairingSet] : null,
-    bye
+    pairings: success
+      ? [...pairingSet].map(([whitePlayer, blackPlayer]) => ({
+        whitePlayer,
+        whitePoints: dataRecord[whitePlayer.id].points,
+        blackPlayer,
+        blackPoints: dataRecord[blackPlayer.id].points
+      }))
+      : null,
+    bye,
+    byePoints: bye ? dataRecord[bye.id].points : 0
   };
 }
 
@@ -141,18 +155,14 @@ export function getNextRound(players: Player[], historyRecord: Record<Player["id
   if (!attempt.pairings)
     return null;
 
-  const pairings: Pairing[] = attempt.pairings.map(([whitePlayer, blackPlayer]) => ({
-    roundIndex,
-    whitePlayer,
-    blackPlayer,
-    result: Result.None
-  }));
+  const pairings = attempt.pairings as Pairing[];
 
   if (attempt.bye)
     pairings.push({
-      roundIndex,
       whitePlayer: attempt.bye,
+      whitePoints: attempt.byePoints,
       blackPlayer: null,
+      blackPoints: 0,
       result: Result.FirstPlayerWin
     });
 

@@ -1,0 +1,11 @@
+.StandingsTable {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', monospace;
+}
+
+.StandingsTable thead {
+  background-image: linear-gradient(to right, #000051 0%, #001ed4 100%);
+}
+
+.StandingsTable th {
+  background: unset;
+}

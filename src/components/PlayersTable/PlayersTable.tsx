@@ -7,7 +7,7 @@ export default function PlayersTable() {
   };
 
   return (
-    <table className="table table-primary table-striped table-hover">
+    <table className="table table-light table-striped table-hover">
       <thead>
         <tr>
           <th>Nom</th>

@@ -1,10 +1,28 @@
 .App {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
+  background-image: url("/img/chess-bg.jpg");
 }
 
-.App>main {
+.App main {
   flex-grow: 1;
   padding: 1em;
+  background-color: rgba(234, 219, 203, 0.8);
+}
+
+@media print {
+  .App {
+    background-image: unset;
+  }
+
+  .App nav {
+    display: none;
+  }
+
+  .App main {
+    background-color: unset;
+    overflow-y: initial !important;
+    padding: 0 !important;
+  }
 }
