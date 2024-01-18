@@ -203,17 +203,26 @@ function getPlayerData(player: Player, history: Pairing[]): Omit<PlayerData, "op
   let cumulativeScore = 0;
   let numberOfWhiteGames = 0;
   let numberOfWins = 0;
+  let numberOfLosses = 0;
+  let opponentRatings = 0;
   let wasBye = false;
   let wonByForfeit = false;
 
   for (const pairing of history) {
-    if (pairing.whitePlayer.id === player.id) {
-      pairing.blackPlayer
-        ? opponentIds.add(pairing.blackPlayer.id)
-        : (wasBye = true);
+    const isWhite = pairing.whitePlayer.id === player.id;
+
+    if (isWhite)
       numberOfWhiteGames++;
+
+    const opponent = isWhite
+      ? pairing.blackPlayer
+      : pairing.whitePlayer;
+
+    if (opponent) {
+      opponentIds.add(opponent.id);
+      opponentRatings += opponent.rating;
     } else {
-      opponentIds.add(pairing.whitePlayer.id);
+      wasBye = true;
     }
 
     if (getWinner(pairing)?.id === player.id) {
@@ -223,6 +232,8 @@ function getPlayerData(player: Player, history: Pairing[]): Omit<PlayerData, "op
         wonByForfeit = true;
     } else if (pairing.result === Result.Draw) {
       points += 0.5;
+    } else {
+      numberOfLosses++;
     }
 
     cumulativeScore += points;
@@ -233,6 +244,7 @@ function getPlayerData(player: Player, history: Pairing[]): Omit<PlayerData, "op
   const previousColor = lastGame ? getPlayerColor(lastGame, player) : Color.None;
   const antePreviousColor = nextToLastGame ? getPlayerColor(nextToLastGame, player) : Color.None;
   const numberOfBlackGames = history.length - numberOfWhiteGames;
+
   return {
     player,
     history,
@@ -244,7 +256,8 @@ function getPlayerData(player: Player, history: Pairing[]): Omit<PlayerData, "op
     previousColor,
     mustAlternate: previousColor !== Color.None && previousColor === antePreviousColor
       || Math.abs(numberOfWhiteGames - numberOfBlackGames) >= 2,
-    canBeBye: !wasBye && !wonByForfeit
+    canBeBye: !wasBye && !wonByForfeit,
+    performance: (opponentRatings + 400 * (numberOfWins - numberOfLosses)) / opponentIds.size
   };
 }
 
@@ -284,10 +297,11 @@ export function getStandings(players: Player[], historyRecord: Record<Player["id
       cumulativeScore: data.cumulativeScore,
       numberOfWins: data.numberOfWins,
       numberOfWhiteGames: data.numberOfWhiteGames,
+      performance: data.performance,
       results: getIndividualResults(player, data.history).map((item) => {
         const opponentPosition = (item.opponent)
           ? positions[item.opponent.id] + 1
-          : players.length + 1;
+          : 0;
         return { ...item, opponentPosition };
       })
     };

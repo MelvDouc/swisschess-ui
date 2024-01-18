@@ -28,4 +28,5 @@ export interface PlayerData {
   mustAlternate: boolean;
   opponentIds: Set<Player["id"]>;
   canBeBye: boolean;
+  performance: number;
 }

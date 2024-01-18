@@ -14,18 +14,22 @@ export default function StandingsTable() {
           <th>Points</th>
           <th>Buchholz</th>
           <th>Cumul</th>
+          <th>Performance</th>
           <th>Résultats</th>
         </tr>
       </thead>
       <tbody>
-        {standings.map(({ player, points, opponentPoints, cumulativeScore, results }, i) => (
+        {standings.map(({ player, points, opponentPoints, cumulativeScore, performance, results }, i) => (
           <tr>
             <td>{i + 1}</td>
             <td>{player.name}</td>
             <td>{points}</td>
             <td>{opponentPoints}</td>
             <td>{cumulativeScore}</td>
-            <td>{results.map(({ opponentPosition, color, ownResult }) => opponentPosition + colorAbbreviations[color] + ownResult).join(" ")}</td>
+            <td>{Math.round(performance)}</td>
+            <td>{results
+              .map(({ opponentPosition: op, color, ownResult }) => op + colorAbbreviations[color] + ownResult)
+              .join(" ")}</td>
           </tr>
         ))}
       </tbody>
