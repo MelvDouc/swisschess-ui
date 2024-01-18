@@ -12,7 +12,7 @@ export default function PlayerForm() {
     const player: Player = {
       id: Date.now(),
       name: nameObs.value,
-      rating: 0
+      rating: 1199
     };
     playersObs.value.push(player);
     playersObs.notify();

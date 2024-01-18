@@ -51,7 +51,7 @@ export function addRound() {
       resolve(round);
       return;
     }
-    reject("Appariements impossibles.");
+    reject("Fin des appariements.");
   });
 }
 
