@@ -1,24 +1,14 @@
+import SaveButton from "$src/components/SaveButton/SaveButton.tsx";
 import { Result } from "$src/helpers/constants.ts";
+import playersObs from "$src/state/players.obs.ts";
 import roundsObs, { addRound } from "$src/state/rounds.obs.ts";
 import type { Pairing } from "$src/types.ts";
-import SaveButton from "../SaveButton/SaveButton.tsx";
 
 export default function RoundsPage() {
-  const init = () => {
-    if (roundsObs.value.length === 0)
-      addRound();
-  };
-
-  const handleChange = (pairing: Pairing) => {
-    return ({ target }: Event) => {
-      pairing.result = (target as HTMLSelectElement).value as Result;
-    };
-  };
-
-  const deleteLastRound = () => {
-    roundsObs.value.pop();
-    roundsObs.notify();
-  };
+  if (playersObs.value.length === 0)
+    return (
+      <p>Veuillez d'abord ajouter des joueurs.</p>
+    );
 
   return (
     <div $init={init}>
@@ -69,4 +59,20 @@ export default function RoundsPage() {
       ))}
     </div>
   );
+}
+
+function init() {
+  if (roundsObs.value.length === 0)
+    addRound();
+}
+
+function handleChange(pairing: Pairing) {
+  return ({ target }: Event) => {
+    pairing.result = (target as HTMLSelectElement).value as Result;
+  };
+}
+
+function deleteLastRound() {
+  roundsObs.value.pop();
+  roundsObs.notify();
 }

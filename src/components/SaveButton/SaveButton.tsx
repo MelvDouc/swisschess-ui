@@ -9,14 +9,19 @@ export default function SaveButton({ isLastRound }: {
   const loadingObs = obs(false);
 
   const save = async (isLastRound: boolean) => {
-    if (isLastRound && roundsObs.value.at(-1)?.every(({ result }) => result !== Result.None)) {
-      loadingObs.value = true;
-      await addRound();
-      loadingObs.value = false;
-      return;
-    }
+    try {
+      if (isLastRound && roundsObs.value.at(-1)?.every(({ result }) => result !== Result.None)) {
+        loadingObs.value = true;
+        await addRound();
+        return;
+      }
 
-    roundsObs.notify();
+      roundsObs.notify();
+    } catch (error) {
+      alert(error);
+    } finally {
+      loadingObs.value = false;
+    }
   };
 
   return (

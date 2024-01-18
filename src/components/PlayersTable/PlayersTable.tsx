@@ -1,9 +1,13 @@
 import playersObs from "$src/state/players.obs.ts";
+import roundsObs from "$src/state/rounds.obs.ts";
 import { Player } from "$src/types.ts";
 
 export default function PlayersTable() {
   const deletePlayer = (player: Player) => {
     playersObs.value = playersObs.value.filter(({ id }) => id !== player.id);
+    // Clear rounds on player removed
+    roundsObs.value.length = 0;
+    roundsObs.notify();
   };
 
   return (
