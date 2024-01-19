@@ -102,7 +102,8 @@ function getFirstRoundPairings(players: Player[]) {
       whitePlayer,
       whitePoints: 0,
       blackPlayer,
-      blackPoints: 0
+      blackPoints: 0,
+      result: Result.None
     };
   });
 
@@ -139,7 +140,8 @@ export function getSubsequentRoundPairings(players: Player[], historyRecord: Rec
         whitePlayer,
         whitePoints: dataRecord[whitePlayer.id].points,
         blackPlayer,
-        blackPoints: dataRecord[blackPlayer.id].points
+        blackPoints: dataRecord[blackPlayer.id].points,
+        result: Result.None
       }))
       : null,
     bye,
@@ -155,7 +157,7 @@ export function getNextRound(players: Player[], historyRecord: Record<Player["id
   if (!attempt.pairings)
     return null;
 
-  const pairings = attempt.pairings as Pairing[];
+  const pairings: Pairing[] = attempt.pairings;
 
   if (attempt.bye)
     pairings.push({
