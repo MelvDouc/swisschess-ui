@@ -191,12 +191,21 @@ function compareData(data1: PlayerData, data2: PlayerData) {
     || data1.numberOfWins - data2.numberOfWins;
 }
 
-function getIndividualResults(player: Player, history: Pairing[]) {
-  return history.map((pairing) => ({
-    opponent: (pairing.whitePlayer.id === player.id) ? pairing.blackPlayer : pairing.whitePlayer,
-    color: getPlayerColor(pairing, player),
-    ownResult: getResultAbbreviation(pairing, player)
-  }));
+function getIndividualResults(player: Player, history: Pairing[]): IndividualResult[] {
+  const results: IndividualResult[] = [];
+
+  for (const pairing of history) {
+    if (pairing.result === Result.None)
+      break;
+
+    results.push({
+      opponent: (pairing.whitePlayer.id === player.id) ? pairing.blackPlayer : pairing.whitePlayer,
+      color: getPlayerColor(pairing, player),
+      ownResult: getResultAbbreviation(pairing, player)
+    });
+  }
+
+  return results;
 }
 
 function getPlayerData(player: Player, history: Pairing[]): Omit<PlayerData, "opponentPoints"> {
@@ -309,3 +318,9 @@ export function getStandings(players: Player[], historyRecord: Record<Player["id
     };
   });
 }
+
+type IndividualResult = {
+  opponent: Player | null;
+  color: Color;
+  ownResult: string;
+};

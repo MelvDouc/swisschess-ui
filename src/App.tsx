@@ -1,9 +1,9 @@
-import cssClasses from "$src/components/App/App.module.css";
 import Nav from "$src/components/Nav/Nav.tsx";
 import PlayerForm from "$src/components/PlayerForm/PlayerForm.tsx";
 import PlayersTable from "$src/components/PlayersTable/PlayersTable.tsx";
 import StandingsTable from "$src/components/StandingsTable/StandingsTable.tsx";
 import RoundsPage from "$src/components/RoundsPage/RoundsPage.tsx";
+import cssClasses from "./App.module.css";
 
 export default function App() {
   return (
